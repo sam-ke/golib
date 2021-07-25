@@ -7,7 +7,11 @@ import (
 )
 
 func log(taskIndex int, msg string) {
-	fmt.Printf("第【%d】个任务 %s\n", taskIndex, msg)
+	task := ""
+	if taskIndex >= 0 {
+		task = fmt.Sprintf("第【%d】个任务,", taskIndex)
+	}
+	fmt.Printf("%v, %s %s\n", time.Now().Format("2006-01-02 15:04:05"), task, msg)
 }
 
 func main() {
@@ -19,9 +23,8 @@ func main() {
 
 	for i := 0; i < taskNum; i++ {
 		go func(index int) {
-			log(index, "已启动")
 			condition.L.Lock()
-			log(index, "等待被信号被唤醒...")
+			log(index, "已启动 等待被信号被唤醒...")
 			condition.Wait()
 			log(index, "被唤醒")
 			condition.L.Unlock()
@@ -29,12 +32,11 @@ func main() {
 	}
 
 	time.Sleep(3 * time.Second)
+	log(-1, "触发 Signal()")
 	condition.Signal()
 
 	time.Sleep(3 * time.Second)
-	condition.Signal()
-
-	time.Sleep(3 * time.Second)
+	log(-1, "触发 Broadcast()")
 	condition.Broadcast()
 
 	time.Sleep(time.Second)

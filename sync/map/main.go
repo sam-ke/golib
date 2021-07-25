@@ -2,25 +2,27 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"sync"
-	"time"
 )
 
 func main() {
-	wg := &sync.WaitGroup{}
+	syncMap := sync.Map{}
+	syncMap.Store("key1", "value1")
+	syncMap.Store("key2", "value2")
+	syncMap.Store("key3", "value3")
 
-	for i:=0; i< 10; i++ {
-		wg.Add(1)
-		go func(index int) {
-			defer wg.Done()
-			s := rand.Intn(3)
-			time.Sleep(time.Second*time.Duration(s))
-			fmt.Printf("任务【%d】\n", index)
-		}(i)
+	//取当个值
+	v, ok := syncMap.Load("key1")
+	if ok {
+		fmt.Printf("syncMap['key1']:%+v\n", v)
 	}
 
-	a := new(interface{})
-	wg.Wait()
-	fmt.Printf("所有任务执行完毕\n")
+	//遍历所有值，当回调函数返回false时停止遍历
+	syncMap.Range(func(key, value interface{}) bool {
+		fmt.Printf("syncMap['%s']:%+v\n", key, v)
+		return true
+	})
+
+	//删除一个元素
+	syncMap.Delete("key2")
 }

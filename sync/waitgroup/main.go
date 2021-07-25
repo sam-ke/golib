@@ -9,15 +9,12 @@ import (
 
 //https://www.toutiao.com/a6775096809460072971/?channel=&source=search_tab
 //https://www.toutiao.com/a6698610775587553795/?channel=&source=search_tab
-//使用场景
-//原理图
-//案例
 // 内存对齐， 对齐系数
 
 func main() {
 	wg := &sync.WaitGroup{}
 
-	for i:=0; i< 10; i++ {
+	for i:=0; i< 1; i++ {
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
