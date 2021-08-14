@@ -14,12 +14,12 @@ import (
 func main() {
 	wg := &sync.WaitGroup{}
 
-	for i:=0; i< 1; i++ {
+	for i := 0; i < 1; i++ {
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
 			s := rand.Intn(3)
-			time.Sleep(time.Second*time.Duration(s))
+			time.Sleep(time.Second * time.Duration(s))
 			fmt.Printf("任务【%d】\n", index)
 		}(i)
 	}
